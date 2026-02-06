@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { schedule } from '../../data/mockData';
 
-const CalendarView = ({ viewMode = 'calendar', currentDate, weekDays, onJobSelect }) => {
+const CalendarView = ({ viewMode = 'calendar', currentDate, weekDays, onJobSelect, onBackToToday }) => {
   const scrollContainerRef = useRef(null);
   const currentTimeRef = useRef(null);
 
@@ -208,8 +208,24 @@ const CalendarView = ({ viewMode = 'calendar', currentDate, weekDays, onJobSelec
               </button>
             ))
           ) : (
-            <div className="bg-white rounded-xl p-4 shadow-sm text-center">
-              <p className="text-gray-500">No jobs scheduled for this week</p>
+            <div className="flex flex-col items-center min-h-[60vh] text-center pt-20 pb-6">
+              <img
+                src="/empty-schedule-illustration.png"
+                alt=""
+                className="w-32 h-32 mx-auto mb-4 object-contain"
+              />
+              <p className="text-gray-700 font-medium">No schedule for this day</p>
+              <p className="text-gray-500 text-sm mt-1">Nothing on the calendar yet</p>
+              {onBackToToday && (
+                <button
+                  type="button"
+                  onClick={onBackToToday}
+                  className="mt-6 px-6 py-3 rounded-full text-sm font-semibold transition-opacity active:opacity-80"
+                  style={{ backgroundColor: 'rgba(0, 106, 86, 0.1)', color: '#006A56' }}
+                >
+                  Back to today
+                </button>
+              )}
             </div>
           )}
         </div>

@@ -160,6 +160,7 @@ const Schedule = () => {
             currentDate={currentDate} 
             weekDays={weekDays}
             onJobSelect={setSelectedJob}
+            onBackToToday={goToToday}
           />
         </div>
       </div>
