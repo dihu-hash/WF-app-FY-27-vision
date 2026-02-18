@@ -2,10 +2,23 @@ import React from 'react';
 
 const PhoneMockup = ({ children }) => {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-slate-100 to-slate-200">
-      <div className="relative">
+    <div
+      className="min-h-screen w-full flex items-center justify-center p-4"
+      style={{
+        minHeight: '100vh',
+        width: '100%',
+        background: 'linear-gradient(to bottom right, #f1f5f9, #e2e8f0)',
+      }}
+    >
+      <div className="relative flex-shrink-0">
         {/* Phone Frame with realistic styling */}
-        <div className="relative bg-gradient-to-b from-gray-900 via-black to-gray-900 rounded-[3.5rem] p-[3px] shadow-[0_20px_80px_-15px_rgba(0,0,0,0.5)]">
+        <div
+          className="relative rounded-[3.5rem] p-[3px]"
+          style={{
+            background: 'linear-gradient(to bottom, #374151, #000, #374151)',
+            boxShadow: '0 20px 80px -15px rgba(0,0,0,0.5)',
+          }}
+        >
           
           {/* Power Button */}
           <div className="absolute right-[-3px] top-[120px] w-[3px] h-[60px] bg-gray-800 rounded-l-sm"></div>
@@ -22,7 +35,10 @@ const PhoneMockup = ({ children }) => {
           {/* Inner frame */}
           <div className="bg-black rounded-[3.3rem] p-[10px] relative">
             {/* Screen */}
-            <div className="bg-white rounded-[2.8rem] overflow-hidden w-[393px] h-[852px] relative">
+            <div
+              className="bg-white rounded-[2.8rem] overflow-hidden relative"
+              style={{ width: 393, height: 852 }}
+            >
               {/* Dynamic Island / Notch */}
               <div className="absolute top-[10px] left-1/2 -translate-x-1/2 w-[126px] h-[37px] bg-black rounded-[30px] z-50 shadow-lg">
                 {/* Camera lens */}
@@ -57,7 +73,7 @@ const PhoneMockup = ({ children }) => {
               </div>
               
               {/* App Content */}
-              <div className="h-full overflow-hidden">
+              <div className="h-full min-h-0 overflow-hidden flex flex-col">
                 {children}
               </div>
             </div>

@@ -26,7 +26,7 @@ const TimerControls = ({ isRunning, isOnBreak, onStart, onStop, onToggleBreak, i
           <button
             onClick={onToggleBreak}
             className={`${buttonSize} rounded-full flex items-center justify-center transition-all duration-500 ease-in-out`}
-            style={{ backgroundColor: isOnBreak ? '#F59E0B' : 'rgba(255, 255, 255, 0.1)' }}
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
           >
             <Coffee size={iconSize} className="text-white" />
           </button>

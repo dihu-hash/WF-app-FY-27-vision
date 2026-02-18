@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { LayoutGrid, Clock, Wallet, Calendar, MoreHorizontal } from 'lucide-react';
+import { LayoutGrid, Clock, CircleDollarSign, Calendar, MoreHorizontal } from 'lucide-react';
 import MoreModal from '../More/MoreModal';
-import { useScroll } from '../../contexts/ScrollContext';
 
 const BottomNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMoreModalOpen, setIsMoreModalOpen] = useState(false);
-  const { navTranslateY } = useScroll();
 
   const mainNavItems = [
     { id: 'home', label: 'Home', icon: LayoutGrid, path: '/' },
     { id: 'time', label: 'Time', icon: Clock, path: '/time' },
-    { id: 'payroll', label: 'Payroll', icon: Wallet, path: '/payroll' },
+    { id: 'payroll', label: 'Payroll', icon: CircleDollarSign, path: '/payroll' },
     { id: 'schedule', label: 'Schedule', icon: Calendar, path: '/schedule' }
   ];
 
@@ -24,11 +22,7 @@ const BottomNav = () => {
   };
 
   const handleNavClick = (item) => {
-    if (item.id === 'more') {
-      setIsMoreModalOpen(true);
-    } else {
-      navigate(item.path);
-    }
+    navigate(item.path);
   };
 
   const NavButton = ({ item, showLabel = true, isMoreButton = false }) => {
@@ -46,14 +40,26 @@ const BottomNav = () => {
           transition: 'background-color 0.3s ease'
         }}
       >
-        <Icon 
-          size={20} 
-          style={{
-            color: active ? '#00856D' : '#6B7280',
-            transition: 'color 0.3s ease'
-          }}
-          strokeWidth={active ? 2.5 : 2}
-        />
+        {item.image ? (
+          <img
+            src={item.image}
+            alt=""
+            className="w-5 h-5"
+            style={{
+              opacity: active ? 1 : 0.7,
+              transition: 'opacity 0.3s ease'
+            }}
+          />
+        ) : (
+          <Icon 
+            size={20} 
+            style={{
+              color: active ? '#00856D' : '#6B7280',
+              transition: 'color 0.3s ease'
+            }}
+            strokeWidth={active ? 2.5 : 2}
+          />
+        )}
         {showLabel && (
           <span 
             className={`text-[10px] whitespace-nowrap ${
@@ -73,13 +79,7 @@ const BottomNav = () => {
 
   return (
     <>
-      <div 
-        className="absolute bottom-0 left-0 right-0 px-4 pb-6 pt-3 z-40"
-        style={{
-          transform: `translateY(${navTranslateY}px)`,
-          transition: 'transform 0.1s linear'
-        }}
-      >
+      <div className="px-4 pb-6 pt-3">
         <div className="flex items-stretch justify-between gap-4">
           {/* Main nav items grouped together */}
           <div 
@@ -136,9 +136,6 @@ const BottomNav = () => {
           </div>
         </div>
       </div>
-      
-      {/* More Modal */}
-      <MoreModal isOpen={isMoreModalOpen} onClose={() => setIsMoreModalOpen(false)} />
     </>
   );
 };

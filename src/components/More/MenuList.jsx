@@ -1,30 +1,34 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Heart, TrendingUp, Users, GitBranch, 
-  Settings, HelpCircle, LogOut, ChevronRight, Wallet 
+  Heart, TrendingUp, Users, GitBranch, Plane, Receipt, FileText,
+  Settings, HelpCircle, ChevronRight
 } from 'lucide-react';
 
 const MenuList = ({ onItemClick }) => {
   const navigate = useNavigate();
 
   const iconMap = {
-    Heart, TrendingUp, Users, GitBranch,
-    Settings, HelpCircle, LogOut, Wallet
+    Heart, TrendingUp, Users, GitBranch, Plane, Receipt, FileText,
+    Settings, HelpCircle
   };
 
-  const workInfoItems = [
+  const workItems = [
+    { id: 'time-off', label: 'Time off', icon: 'Plane', path: '/time-off' },
+    { id: 'expenses', label: 'Expenses', icon: 'Receipt', path: '/expenses' },
     { id: 'benefits', label: 'Benefits', icon: 'Heart', path: '/benefits' },
-    { id: 'performance', label: 'Performance', icon: 'TrendingUp', path: '/performance' },
-    { id: 'team', label: 'Team', icon: 'Users', path: '/team' },
-    { id: 'workflows', label: 'Workflows', icon: 'GitBranch', path: '/workflows' }
+    { id: 'documents', label: 'Documents', icon: 'FileText', path: '/documents' }
   ];
 
-  const accountItems = [
-    { id: 'wallet', label: 'My wallet', icon: 'Wallet', path: '/wallet' },
+  const teamItems = [
+    { id: 'hr-workflows', label: 'HR workflows', icon: 'GitBranch', path: '/workflows' },
+    { id: 'performance', label: 'Performance', icon: 'TrendingUp', path: '/performance' },
+    { id: 'directory', label: 'Directory', icon: 'Users', path: '/team' }
+  ];
+
+  const supportItems = [
     { id: 'settings', label: 'Settings', icon: 'Settings', path: '/settings' },
-    { id: 'help', label: 'Help & Support', icon: 'HelpCircle', path: '/help' },
-    { id: 'logout', label: 'Log out', icon: 'LogOut', path: '/logout' }
+    { id: 'help', label: 'Help & Support', icon: 'HelpCircle', path: '/help' }
   ];
 
   const MenuItem = ({ item }) => {
@@ -49,25 +53,37 @@ const MenuList = ({ onItemClick }) => {
 
   return (
     <div className="space-y-6">
-      {/* Work Information Section */}
+      {/* Work Section */}
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100">
-          <h3 className="text-[14px] font-semibold" style={{ color: '#4C555B' }}>Work information</h3>
+          <h3 className="text-[14px] font-semibold" style={{ color: '#4C555B' }}>Work</h3>
         </div>
         <div className="divide-y divide-gray-100">
-          {workInfoItems.map(item => (
+          {workItems.map(item => (
             <MenuItem key={item.id} item={item} />
           ))}
         </div>
       </div>
 
-      {/* Account Section */}
+      {/* Team Section */}
       <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
         <div className="px-4 py-3 border-b border-gray-100">
-          <h3 className="text-[14px] font-semibold" style={{ color: '#4C555B' }}>Account</h3>
+          <h3 className="text-[14px] font-semibold" style={{ color: '#4C555B' }}>Team</h3>
         </div>
         <div className="divide-y divide-gray-100">
-          {accountItems.map(item => (
+          {teamItems.map(item => (
+            <MenuItem key={item.id} item={item} />
+          ))}
+        </div>
+      </div>
+
+      {/* Settings & Support Section */}
+      <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+        <div className="px-4 py-3 border-b border-gray-100">
+          <h3 className="text-[14px] font-semibold" style={{ color: '#4C555B' }}>Settings & Support</h3>
+        </div>
+        <div className="divide-y divide-gray-100">
+          {supportItems.map(item => (
             <MenuItem key={item.id} item={item} />
           ))}
         </div>

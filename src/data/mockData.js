@@ -7,7 +7,8 @@ export const employee = {
   phone: "(555) 123-4567",
   address: "123 Main Street, New York, NY 10001",
   role: "Service Technician",
-  department: "Field Operations"
+  department: "Field Operations",
+  company: "Acme Co."
 };
 
 // Current Job Information
@@ -20,7 +21,7 @@ export const currentJob = {
   billableRate: 25,
   status: "Investigating",
   manager: "Alan Wlaker",
-  notes: "",
+  notes: "Inspected roof sections 3–5. Minor wear on flashing. Customer requested quote for full replacement next quarter.",
   coordinates: { lat: 40.7589, lng: -73.9851 },
   workCoordinates: { lat: 40.7610, lng: -73.9840 },
   // Additional timesheet fields
@@ -39,6 +40,25 @@ export const currentJob = {
   overtimeApproved: "Yes",
   hazardPay: "Yes",
   customerContact: "(555) 123-4567"
+};
+
+// Additional info for current job (Notes & Attachments on Time page)
+export const currentJobAdditionalInfo = {
+  notes: "Inspected roof sections 3–5. Minor wear on flashing. Customer requested quote for full replacement next quarter.",
+  attachments: [
+    { id: 1, name: "roof_section_3.jpg", date: "Today, 10:15 AM", thumbnailUrl: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=100&h=100&fit=crop" },
+    { id: 2, name: "flashing_detail.jpg", date: "Today, 10:22 AM", thumbnailUrl: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=100&h=100&fit=crop" },
+    { id: 3, name: "damage_closeup.jpg", date: "Today, 10:28 AM", thumbnailUrl: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=100&h=100&fit=crop" },
+    { id: 4, name: "materials_used.jpg", date: "Today, 10:35 AM" },
+    { id: 5, name: "final_inspection.jpg", date: "Today, 10:42 AM" },
+    { id: 6, name: "signoff.jpg", date: "Today, 10:45 AM" }
+  ]
+};
+
+// Badge status when user is clocked in (Time page job card)
+export const clockedInBadge = {
+  label: 'Active',
+  className: 'px-3 py-1 rounded-full text-xs font-semibold bg-[#C7F5DB] text-[#006A56] flex-shrink-0'
 };
 
 // Paychecks Data
@@ -90,6 +110,18 @@ export const yearToDateBreakdown = {
   total: 24759.00
 };
 
+// This month earnings (dashboard insight)
+export const thisMonthEarnings = 2850.75;
+
+// Invoices (for Tap to Pay flow – filter by currentJob.customer)
+export const invoices = [
+  { id: 1, invoiceNumber: '1001', customer: 'Evergreen Apartments', amount: 1000, dueDate: 'Feb 17', dueInDays: 15, status: 'Open' },
+  { id: 2, invoiceNumber: '1002', customer: 'Evergreen Apartments', amount: 1000, dueDate: 'Mar 19', dueInDays: 45, status: 'Open' },
+  { id: 3, invoiceNumber: '1003', customer: 'Evergreen Apartments', amount: 1000, dueDate: 'Mar 19', dueInDays: 45, status: 'Open' },
+  { id: 4, invoiceNumber: '1004', customer: 'Evergreen Apartments', amount: 750.5, dueDate: 'Feb 24', dueInDays: 22, status: 'Open' },
+  { id: 5, invoiceNumber: '1005', customer: 'Evergreen Apartments', amount: 500, dueDate: 'Mar 5', dueInDays: 31, status: 'Open' },
+];
+
 // Tasks Data
 export const tasks = [
   { 
@@ -112,18 +144,51 @@ export const tasks = [
     status: "in_progress", 
     dueDate: "Jan 31",
     priority: "medium"
-  },
-  { 
-    id: 4, 
-    title: "Equipment inspection", 
-    status: "pending", 
-    dueDate: "Feb 2",
-    priority: "low"
   }
 ];
 
-// Schedule Data
+// Time off data
+export const timeOff = {
+  balance: { hours: 32, label: 'PTO balance' },
+  upcoming: [
+    { id: 1, type: 'Vacation', start: 'Feb 14', end: 'Feb 18', status: 'Approved' },
+    { id: 2, type: 'Sick', start: 'Mar 2', end: 'Mar 2', status: 'Pending' }
+  ]
+};
+
+// Notifications (schedule, paychecks, team, tasks)
+export const notifications = [
+  { id: 1, type: 'schedule', title: 'New schedule posted', body: 'Your schedule for Feb 3–9 is ready. 4 jobs assigned.', time: '2h ago', read: false },
+  { id: 2, type: 'paycheck', title: 'Paycheck available', body: 'Your pay for Fri, Apr 30 ($1,348.29) is ready to view.', time: '1d ago', read: false },
+  { id: 3, type: 'team', title: 'Team announcement', body: 'Safety standdown this Friday 9 AM. All field techs required.', time: 'Yesterday', read: true },
+  { id: 4, type: 'task', title: 'Task due soon', body: 'Complete safety training is due Today.', time: 'Today', read: false },
+  { id: 5, type: 'schedule', title: 'Schedule change', body: 'Evergreen Apartments on Feb 5 moved to 10:00 AM.', time: '2d ago', read: true },
+  { id: 6, type: 'paycheck', title: 'Pay stub ready', body: 'Pay period ending Apr 15 – view your stub in Payroll.', time: '3d ago', read: true },
+  { id: 7, type: 'team', title: 'New policy', body: 'Updated PTO request process is now in effect.', time: '1 week ago', read: true },
+  { id: 8, type: 'task', title: 'Timesheet reminder', body: 'Submit timesheet for last week by EOD tomorrow.', time: 'Yesterday', read: false },
+];
+
+// Schedule Data (2026-02-02 = "today" so Dashboard schedule widget shows a job)
 export const schedule = [
+  {
+    date: "2026-02-02",
+    customer: "Riverside Plaza",
+    service: "Plumbing",
+    time: "10:00 AM",
+    status: "Scheduled",
+    customerInfo: {
+      contact: "Maria Chen",
+      phone: "(555) 888-9900",
+      address: "200 Riverside Dr, Unit 12"
+    },
+    jobDetails: {
+      duration: "2 hours",
+      priority: "Medium",
+      equipment: "Pipe wrench, sealant",
+      notes: "Kitchen sink leak under cabinet"
+    },
+    pendingActions: ["Assess leak", "Replace pipe section"]
+  },
   {
     date: "2026-01-30",
     customer: "Evergreen Apartments",
@@ -305,7 +370,8 @@ export const moreMenuItems = {
     { id: 'benefits', label: 'Benefits', icon: 'Heart', path: '/benefits' },
     { id: 'performance', label: 'Performance', icon: 'TrendingUp', path: '/performance' },
     { id: 'team', label: 'Team', icon: 'Users', path: '/team' },
-    { id: 'workflows', label: 'Workflows', icon: 'GitBranch', path: '/workflows' }
+    { id: 'workflows', label: 'Workflows', icon: 'GitBranch', path: '/workflows' },
+    { id: 'time-off', label: 'Time off', icon: 'Plane', path: '/time-off' }
   ],
   account: [
     { id: 'settings', label: 'Settings', icon: 'Settings', path: '/settings' },

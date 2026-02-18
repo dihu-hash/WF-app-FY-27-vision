@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Mail, Phone, MapPin, Calendar, Briefcase, DollarSign, Clock, Wallet, TrendingUp, User, Lock, Bell, ChevronRight, LogOut } from 'lucide-react';
+import { X, Mail, Phone, MapPin, Calendar, Briefcase, DollarSign, Clock, Wallet, Lock, RefreshCw, Bell, ChevronRight, LogOut } from 'lucide-react';
 import { useScroll } from '../contexts/ScrollContext';
-import { employee } from '../data/mockData';
+import { employee, notifications } from '../data/mockData';
 import { useAppState } from '../contexts/AppStateContext';
 
 const Profile = () => {
@@ -14,6 +14,9 @@ const Profile = () => {
   const displayName = userData.userName || employee.name;
   const displayEmail = userData.email || employee.email;
   const displayPhone = userData.phoneNumber || employee.phone;
+
+  const unreadNotifications = notifications.filter(n => !n.read).length;
+  const latestNotification = notifications[0];
 
   return (
     <div className="h-screen flex flex-col" style={{ backgroundColor: '#E2E9ED' }}>
@@ -39,20 +42,22 @@ const Profile = () => {
         <div className="px-4 py-6 space-y-4">
           
           {/* Profile Header Card */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm text-center">
+          <div className="bg-white rounded-2xl p-4 shadow-sm flex items-center gap-4">
             <img 
               src={employee.avatar} 
               alt={displayName}
-              className="w-24 h-24 rounded-full mx-auto mb-4 shadow-lg"
+              className="w-16 h-16 rounded-full flex-shrink-0 shadow-md"
             />
-            <h2 className="text-2xl font-bold text-gray-900 mb-1">{displayName}</h2>
-            <p className="text-sm text-gray-500">{employee.role}</p>
-            <p className="text-sm text-gray-500">{employee.department}</p>
+            <div className="min-w-0 text-left">
+              <h2 className="text-lg font-bold text-gray-900 mb-0.5">{displayName}</h2>
+              <p className="text-sm font-medium text-gray-900">{employee.company}</p>
+              <p className="text-xs text-gray-500 mt-1">{employee.role} · {employee.department}</p>
+            </div>
           </div>
 
-          {/* Quick Stats */}
+          {/* Wallet & Notification summary */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white rounded-2xl p-4 shadow-sm">
+            <div className="bg-white rounded-2xl p-4 shadow-sm flex flex-col text-left">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-10 h-10 rounded-full bg-[#006A56]/10 flex items-center justify-center">
                   <Wallet className="w-5 h-5 text-[#006A56]" />
@@ -60,15 +65,35 @@ const Profile = () => {
               </div>
               <p className="text-base font-semibold text-gray-900">$1,847</p>
               <p className="text-sm text-gray-500">Wallet Balance</p>
+              <button
+                type="button"
+                onClick={() => navigate('/wallet')}
+                className="mt-2 text-sm font-medium text-left w-full"
+                style={{ color: '#006A56' }}
+              >
+                View
+              </button>
             </div>
-            <div className="bg-white rounded-2xl p-4 shadow-sm">
+            <div className="bg-white rounded-2xl p-4 shadow-sm flex flex-col text-left">
               <div className="flex items-center gap-2 mb-2">
                 <div className="w-10 h-10 rounded-full bg-[#006A56]/10 flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-[#006A56]" />
+                  <Bell className="w-5 h-5 text-[#006A56]" />
                 </div>
               </div>
-              <p className="text-base font-semibold text-gray-900">32.5h</p>
-              <p className="text-sm text-gray-500">This Week</p>
+              <p className="text-base font-semibold text-gray-900">
+                {unreadNotifications} unread
+              </p>
+              <p className="text-sm text-gray-500 truncate" title={latestNotification?.title}>
+                {latestNotification ? `${latestNotification.title} · ${latestNotification.time}` : 'No notifications'}
+              </p>
+              <button
+                type="button"
+                onClick={() => navigate('/notifications')}
+                className="mt-2 text-sm font-medium text-left w-full"
+                style={{ color: '#006A56' }}
+              >
+                View
+              </button>
             </div>
           </div>
 
@@ -98,18 +123,13 @@ const Profile = () => {
           <div className="bg-white rounded-2xl py-4 shadow-sm">
             <div className="space-y-0">
               <button className="w-full flex items-center justify-start gap-3 px-3 py-3 rounded-xl transition-colors">
-                <User size={20} className="text-gray-600" />
-                <span className="text-sm font-medium text-gray-900">Edit profile</span>
-              </button>
-              <div className="border-t border-gray-100" />
-              <button className="w-full flex items-center justify-start gap-3 px-3 py-3 rounded-xl transition-colors">
                 <Lock size={20} className="text-gray-600" />
                 <span className="text-sm font-medium text-gray-900">Change password</span>
               </button>
               <div className="border-t border-gray-100" />
               <button className="w-full flex items-center justify-start gap-3 px-3 py-3 rounded-xl transition-colors">
-                <Bell size={20} className="text-gray-600" />
-                <span className="text-sm font-medium text-gray-900">Notification settings</span>
+                <RefreshCw size={20} className="text-gray-600" />
+                <span className="text-sm font-medium text-gray-900">Switch company</span>
               </button>
               <div className="border-t border-gray-100" />
               <button className="w-full flex items-center justify-start gap-3 px-3 py-3 rounded-xl transition-colors">

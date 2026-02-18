@@ -1,14 +1,21 @@
 import React from 'react';
 import Header from '../components/Layout/Header';
 import CalendarView from '../components/Schedule/CalendarView';
-import { Calendar, List, ChevronLeft, ChevronRight, X, MapPin, Phone, User, Clock, AlertCircle, CheckCircle } from 'lucide-react';
+import { Calendar, List, ChevronLeft, ChevronRight, X, MapPin, Phone, User, Clock, AlertCircle, CheckCircle, MoreHorizontal } from 'lucide-react';
 import { useScroll } from '../contexts/ScrollContext';
+import { useNotificationShift } from '../contexts/NotificationShiftContext';
 
 const Schedule = () => {
   const [viewMode, setViewMode] = React.useState('calendar');
   const [currentDate, setCurrentDate] = React.useState(new Date());
   const [selectedJob, setSelectedJob] = React.useState(null);
+  const [isJobMoreOpen, setJobMoreOpen] = React.useState(false);
   const { handleScroll } = useScroll();
+  const { scheduleList } = useNotificationShift();
+
+  React.useEffect(() => {
+    if (!selectedJob) setJobMoreOpen(false);
+  }, [selectedJob]);
 
   // Generate 5 days centered around current date
   const getFiveDays = (centerDate) => {
@@ -159,6 +166,7 @@ const Schedule = () => {
             viewMode={viewMode} 
             currentDate={currentDate} 
             weekDays={weekDays}
+            schedule={scheduleList}
             onJobSelect={setSelectedJob}
             onBackToToday={goToToday}
           />
@@ -272,22 +280,22 @@ const Schedule = () => {
               <div className="bg-white rounded-2xl p-4 shadow-sm">
                 <h4 className="text-[14px] font-semibold mb-3" style={{ color: '#4C555B' }}>Customer information</h4>
                 <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <User size={16} className="text-gray-400 mt-0.5" />
+                  <div className="flex items-center gap-3">
+                    <User size={16} className="text-gray-400 flex-shrink-0" />
                     <div>
                       <p className="text-xs text-gray-500">Contact</p>
                       <p className="text-sm text-gray-900">{selectedJob.customerInfo.contact}</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Phone size={16} className="text-gray-400 mt-0.5" />
+                  <div className="flex items-center gap-3">
+                    <Phone size={16} className="text-gray-400 flex-shrink-0" />
                     <div>
                       <p className="text-xs text-gray-500">Phone</p>
                       <p className="text-sm text-gray-900">{selectedJob.customerInfo.phone}</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <MapPin size={16} className="text-gray-400 mt-0.5" />
+                  <div className="flex items-center gap-3">
+                    <MapPin size={16} className="text-gray-400 flex-shrink-0" />
                     <div>
                       <p className="text-xs text-gray-500">Address</p>
                       <p className="text-sm text-gray-900">{selectedJob.customerInfo.address}</p>
@@ -353,7 +361,34 @@ const Schedule = () => {
             />
           </div>
 
-          {/* Fixed Action Button - pinned to bottom with 24px padding, above nav */}
+          {/* More options: full-bleed bottom sheet (positioned relative to overlay) */}
+          {isJobMoreOpen && (
+            <>
+              <div 
+                className="absolute inset-0 z-[59] bg-black/40" 
+                onClick={() => setJobMoreOpen(false)} 
+                aria-hidden="true"
+              />
+              <div 
+                className="absolute left-0 right-0 bottom-0 z-[61] bg-white rounded-t-2xl shadow-[0_-4px_24px_rgba(0,0,0,0.12)] animate-slideUp pb-8"
+              >
+                <div className="w-10 h-1 rounded-full bg-gray-200 mx-auto mt-3 mb-4" />
+                <div className="px-4 pb-8">
+                  {['Take payments', 'Create invoice', 'View timesheets'].map((label) => (
+                    <button
+                      key={label}
+                      onClick={() => setJobMoreOpen(false)}
+                      className="w-full text-left px-4 py-4 text-base text-gray-900 font-medium hover:bg-gray-50 active:bg-gray-100 transition-colors rounded-xl"
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Fixed Action Buttons - pinned to bottom with 24px padding, above nav */}
           <div 
             className="absolute left-0 right-0 px-4 pt-4 pb-6 z-[60]"
             style={{ 
@@ -362,12 +397,21 @@ const Schedule = () => {
               paddingBottom: '24px'
             }}
           >
-            <button
-              className="w-full h-12 rounded-full font-semibold text-white transition-opacity active:opacity-80 shadow-lg"
-              style={{ backgroundColor: '#006A56' }}
-            >
-              Clock in
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                className="flex-1 h-12 rounded-full font-semibold text-white transition-opacity active:opacity-80 shadow-lg"
+                style={{ backgroundColor: '#006A56' }}
+              >
+                Clock in
+              </button>
+              <button
+                onClick={() => setJobMoreOpen(prev => !prev)}
+                className="w-12 h-12 flex-shrink-0 rounded-full flex items-center justify-center transition-opacity active:opacity-80"
+                style={{ backgroundColor: 'rgba(0, 106, 86, 0.1)', color: '#006A56' }}
+              >
+                <MoreHorizontal size={24} />
+              </button>
+            </div>
           </div>
         </div>
         );

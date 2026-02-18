@@ -4,16 +4,18 @@ import Header from '../components/Layout/Header';
 import Timer from '../components/Time/Timer';
 import TimerControls from '../components/Time/TimerControls';
 import JobDetails from '../components/Time/JobDetails';
-import AdditionalInfoCard from '../components/Time/AdditionalInfoCard';
+import QuickActionsWidget from '../components/Time/QuickActionsWidget';
+import ExpenseSubmitFlow from '../components/Time/ExpenseSubmitFlow';
+import TapToPayFlow from '../components/Time/TapToPayFlow';
 import LocationMap from '../components/Time/LocationMap';
 import CountdownOverlay from '../components/Time/CountdownOverlay';
 import JobShortcutCard from '../components/Time/JobShortcutCard';
-import { useTimer } from '../hooks/useTimer';
+import { useTimerContext } from '../contexts/TimerContext';
 import { useScroll } from '../contexts/ScrollContext';
 import { schedule } from '../data/mockData';
 
 const Time = () => {
-  const { isRunning, isOnBreak, formattedTime, start, stop, toggleBreak } = useTimer();
+  const { isRunning, isOnBreak, formattedTime, start, stop, toggleBreak } = useTimerContext();
   const [activePanel, setActivePanel] = useState(0);
   const [showCountdown, setShowCountdown] = useState(false);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -26,6 +28,9 @@ const Time = () => {
   const startPanelIndex = useRef(0);
   const [dragOffset, setDragOffset] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showExpenseFlow, setShowExpenseFlow] = useState(false);
+  const [showTapToPayFlow, setShowTapToPayFlow] = useState(false);
+  const [paymentCompleted, setPaymentCompleted] = useState(false);
   const { handleScroll: handleNavScroll } = useScroll();
 
   // Calculate states based on scroll position
@@ -125,8 +130,13 @@ const Time = () => {
   const panels = [
     { id: 0, component: (
       <div className="space-y-4">
-        <JobDetails />
-        <AdditionalInfoCard />
+        <JobDetails isRunning={isRunning} paymentCompleted={paymentCompleted} />
+        {isRunning && (
+          <QuickActionsWidget
+            onSubmitExpenses={() => setShowExpenseFlow(true)}
+            onPayments={() => setShowTapToPayFlow(true)}
+          />
+        )}
       </div>
     )},
     { id: 1, component: (
@@ -176,7 +186,17 @@ const Time = () => {
     : { backgroundColor: '#21262A' };
 
   return (
-    <div className="h-screen flex flex-col relative" style={{ backgroundColor: '#E2E9ED' }}>
+    <div className="h-full min-h-0 flex flex-col relative" style={{ backgroundColor: '#E2E9ED' }}>
+      {/* Expense submit flow overlay */}
+      {showExpenseFlow && (
+        <ExpenseSubmitFlow onClose={() => setShowExpenseFlow(false)} />
+      )}
+      {showTapToPayFlow && (
+        <TapToPayFlow
+        onClose={() => setShowTapToPayFlow(false)}
+        onPaymentComplete={() => setPaymentCompleted(true)}
+      />
+      )}
       {/* Countdown Overlay */}
       {showCountdown && (
         <CountdownOverlay 

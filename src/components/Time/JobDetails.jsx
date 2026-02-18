@@ -1,7 +1,7 @@
 import React from 'react';
-import { currentJob } from '../../data/mockData';
+import { currentJob, clockedInBadge } from '../../data/mockData';
 
-const JobDetails = ({ showExtended = false }) => {
+const JobDetails = ({ showExtended = false, isRunning = false, paymentCompleted = false }) => {
   const details = [
     { label: 'Job number', value: currentJob.jobNumber },
     { label: 'Customer / Project', value: currentJob.customer },
@@ -19,10 +19,41 @@ const JobDetails = ({ showExtended = false }) => {
     { label: 'Customer contact', value: currentJob.customerContact }
   ];
 
+  // Clocked-in: layout similar to JobShortcutCard (title + subtitle + badge, then actions, then Edit)
+  if (isRunning) {
+    return (
+      <div className="bg-white rounded-2xl p-4 shadow-sm flex flex-col min-h-[160px]">
+        <div className="flex items-start justify-between mb-3 flex-1">
+          <div className="flex-1 min-w-0">
+            <h3 className="text-sm font-semibold text-gray-900 mb-2">{currentJob.customer}</h3>
+            <div className="flex items-center gap-2 text-sm text-gray-600 flex-wrap">
+              <span>{currentJob.serviceItem}</span>
+              <span className="text-gray-400">•</span>
+              <span>{currentJob.location}</span>
+              {paymentCompleted && (
+                <>
+                  <span className="text-gray-400">•</span>
+                  <span className="font-semibold" style={{ color: '#006A56' }}>Paid</span>
+                </>
+              )}
+            </div>
+          </div>
+          <span className={clockedInBadge.className}>{clockedInBadge.label}</span>
+        </div>
+        <div className="pt-3 mt-auto">
+          <button className="text-[#006A56] font-semibold text-sm">
+            Edit details
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Not clocked in: full details list
   return (
     <div className="bg-white rounded-2xl px-4 shadow-sm">
       {details.map((detail, index) => (
-        <div 
+        <div
           key={index}
           className={`flex items-center justify-between py-3 ${
             index !== details.length - 1 ? 'border-b border-gray-100' : ''

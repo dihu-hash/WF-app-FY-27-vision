@@ -1,9 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import { schedule } from '../../data/mockData';
 
-const CalendarView = ({ viewMode = 'calendar', currentDate, weekDays, onJobSelect, onBackToToday }) => {
+const CalendarView = ({ viewMode = 'calendar', currentDate, weekDays, schedule: scheduleProp, onJobSelect, onBackToToday }) => {
   const scrollContainerRef = useRef(null);
   const currentTimeRef = useRef(null);
+  const scheduleList = scheduleProp ?? schedule;
 
   // All 24 hours of the day (12 AM to 11 PM)
   const getCurrentHour = () => new Date().getHours();
@@ -44,7 +45,7 @@ const CalendarView = ({ viewMode = 'calendar', currentDate, weekDays, onJobSelec
 
   const getJobForDate = (date) => {
     const dateStr = date.toISOString().split('T')[0];
-    return schedule.find(s => s.date === dateStr);
+    return scheduleList.find(s => s.date === dateStr);
   };
 
   const getJobTimeSlot = (time) => {
